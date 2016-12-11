@@ -22,4 +22,30 @@ class Welcome extends CI_Controller {
 	{
 		$this->load->view('welcome_message');
 	}
+        
+        public function test()
+        {
+            $this->load->library('reddit_sdk');
+            $reddit =  new reddit();
+            
+            print_r($reddit->getUser());
+            $title = "[7th] Shocking Pikachu Giveaway!";
+            $link = "[g] Hi everyone, I started Pokemon Sun today and got hold of some Pikachus to share!";
+            $subreddit = "machampgate";
+            $response = $reddit->createStory($title, $link, $subreddit);
+            print_r($response);
+        }
+        public function refresh(){
+            $this->load->library('reddit_sdk');
+            $reddit =  new reddit();
+            $reddit =  $reddit->refreshToken();
+        }
+        public function user()
+        {
+            $this->load->library('reddit_sdk');
+            $reddit =  new reddit();
+            $response = $reddit->getUser();
+            var_dump($response);
+            
+        }
 }
