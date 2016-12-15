@@ -20,20 +20,26 @@ class Welcome extends CI_Controller {
 	 */
 	public function index()
 	{
-		$this->load->view('welcome_message');
+            $this->load->library('reddit_sdk');
+            
+		$reddit = new reddit();
+                $callbackUrl = "http://localhost/machampgate/welcome/test";
+                $url = $reddit->getLoginUrl($callbackUrl);
+                header("Location: $url");
 	}
         
         public function test()
         {
-            $this->load->library('reddit_sdk');
-            $reddit =  new reddit();
             
-            print_r($reddit->getUser());
-            $title = "[7th] Shocking Pikachu Giveaway!";
-            $link = "[g] Hi everyone, I started Pokemon Sun today and got hold of some Pikachus to share!";
-            $subreddit = "machampgate";
-            $response = $reddit->createStory($title, $link, $subreddit);
-            print_r($response);
+            $this->load->library('reddit_sdk');
+            
+            $reddit = new reddit();
+            $oauth_callbackUrl  = "http://localhost/machampgate/welcome/test"; //THIS URL MUST BE THE SAME AS ABOVE
+            //AS OF NOW THIS REQUEST USES duration=permanent WHICH INCLUDES A REFRESH TOKEN!
+            $token = $reddit->getOAuthToken($_REQUEST['code'],$oauth_callbackUrl);
+            $reddit->setOAuthToken($token->access_token);
+            $info = $reddit->getUser();
+            var_dump($info);
         }
         public function refresh(){
             $this->load->library('reddit_sdk');
@@ -44,8 +50,23 @@ class Welcome extends CI_Controller {
         {
             $this->load->library('reddit_sdk');
             $reddit =  new reddit();
+            var_dump($reddit);
             $response = $reddit->getUser();
             var_dump($response);
             
+        }
+        
+        public function newHistory(){
+            $this->load->library('reddit_sdk');
+            $reddit = new reddit();
+            
+            var_dump($reddit);
+            
+            var_dump($reddit->getUser());
+            $title = "[7th] Shocking Pikachu Giveaway!";
+            $link = "[g] Hi everyone, I started Pokemon Sun today and got hold of some Pikachus to share!";
+            $subreddit = "machampgate";
+            $response = $reddit->createStory($title, $link, $subreddit);
+            print_r($response);
         }
 }
