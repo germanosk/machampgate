@@ -6,3 +6,4 @@
 !*/cache/.htaccess
 /application/third_party/phapper/config.php
 /application/third_party/reddit-php-sdk/config.php
+/application/third_party/OAuth2/RedditConfig.php
